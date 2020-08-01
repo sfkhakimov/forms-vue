@@ -1,24 +1,7 @@
-# forms
+# Форма для регистрации
 
-## Project setup
-```
-npm install
-```
+Форма для регистрации нового пользователя
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## О проекте
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Форма валидирует поля отмеченные `*`. А именно: `Фамилия, Имя, Дата рождения, Номер телефона, Группа клиентов, Город, Тип документа, Дата выдачи.` Для валидации номера телефона использую регулярное выражение. Остальные поля валидируются только на необходимость заполенения.
