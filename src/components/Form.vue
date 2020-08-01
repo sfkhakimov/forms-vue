@@ -2,163 +2,99 @@
   <div>
     <h1>Заполните форму</h1>
     <form class="form" @submit.prevent="submitForm" novalidate="true">
-      {{ Object.keys(this.about).map(elem => {
-      if (elem.type === 'text') {
-        console.log(elem)
-        return <FormInput
-
+      <div v-for="elem in Object.values(about)" :key="elem.label">
+        <template
+          v-if="
+            elem.type === 'text' ||
+              elem.type === 'date' ||
+              elem.type === 'checkbox'
+          "
+        >
+          <FormInput
+            :label="elem.label"
+            :type="elem.type"
+            v-model="elem.value"
+            :required="elem.required"
+            :touched="elem.touched"
+            :placeholder="elem.placeholder"
+            :errorText="elem.errorText"
+            @input="handleValidate(elem)"
+          />
+        </template>
+        <template v-if="elem.type === 'radio'">
+          <FormChecked
+            :label="elem.label"
+            v-model="elem.value"
+            :required="elem.required"
+            :touched="elem.touched"
+            :name="elem.name"
+            :type="elem.type"
+            :initialValue="elem.initialValue"
+            @input="handleValidate(elem)"
+          />
+        </template>
+        <template v-if="elem.type === 'select'">
+          <FromSelect
+            :label="elem.label"
+            v-model="elem.value"
+            :required="elem.required"
+            :touched="elem.touched"
+            :initialValue="elem.initialValue"
+            :multiple="elem.multiple"
+            :errorText="elem.errorText"
+            @input="handleValidate(elem)"
+          />
+        </template>
+      </div>
+      <hr class="form__separator" />
+      <h2 class="form__title">Адрес</h2>
+      <div v-for="elem in Object.values(address)" :key="elem.label">
+        <FormInput
+          :label="elem.label"
+          v-model="elem.value"
+          :required="elem.required"
+          :touched="elem.touched"
+          :errorText="elem.errorText"
+          :placeholder="elem.placeholder"
+          @input="handleValidate(elem)"
         />
-        <FormChecked />
-        <FormSelect />
-      }
-      })}}
-      <!-- <FormInput
-        :label="about.lastName.label"
-        v-model="about.lastName.value"
-        :required="about.lastName.required"
-        :touched="about.lastName.touched"
-        :placeholder="about.lastName.placeholder"
-        :errorText="about.lastName.errorText"
-        @input="handleValidate(about.lastName)"
-      />
-      <FormInput
-        :label="about.firstName.label"
-        v-model="about.firstName.value"
-        :required="about.firstName.required"
-        :touched="about.firstName.touched"
-        :placeholder="about.firstName.placeholder"
-        :errorText="about.firstName.errorText"
-        @input="handleValidate(about.firstName)"
-      />
-      <FormInput
-        :label="about.middleName.label"
-        v-model="about.middleName.value"
-        :required="about.middleName.required"
-        :touched="about.middleName.touched"
-        :placeholder="about.middleName.placeholder"
-        @input="handleValidate(about.middleName)"
-      />
-      <FormInput
-        :label="about.dateOfBirth.label"
-        v-model="about.dateOfBirth.value"
-        :required="about.dateOfBirth.required"
-        :touched="about.dateOfBirth.touched"
-        :type="about.dateOfBirth.type"
-        :errorText="about.dateOfBirth.errorText"
-        @input="handleValidate(about.dateOfBirth)"
-      />
-      <FormInput
-        :label="about.phoneNumber.label"
-        v-model="about.phoneNumber.value"
-        :required="about.phoneNumber.required"
-        :touched="about.phoneNumber.touched"
-        :placeholder="about.phoneNumber.placeholder"
-        :name="about.phoneNumber.name"
-        :errorText="about.phoneNumber.errorText"
-        @input="handleValidate(about.phoneNumber)"
-      />
-      <FormChecked
-        :label="about.sex.label"
-        v-model="about.sex.value"
-        :name="about.sex.name"
-        :type="about.sex.type"
-        :initialValue="about.sex.initialValue"
-        @input="handleValidate(about.sex)"
-      />
-      <FromSelect
-        :label="about.customerGroup.label"
-        v-model="about.customerGroup.value"
-        :required="about.customerGroup.required"
-        :touched="about.customerGroup.touched"
-        :placeholder="about.customerGroup.placeholder"
-        :initialValue="about.customerGroup.initialValue"
-        :multiple="about.customerGroup.multiple"
-        :errorText="about.customerGroup.errorText"
-        @input="handleValidate(about.customerGroup)"
-      />
-      <FromSelect
-        :label="about.attendingDoctor.label"
-        v-model="about.attendingDoctor.value"
-        :touched="about.attendingDoctor.touched"
-        :placeholder="about.attendingDoctor.placeholder"
-        :initialValue="about.attendingDoctor.initialValue"
-        @input="handleValidate(about.attendingDoctor)"
-      />
-      <FormInput
-        :label="about.sms.label"
-        v-model="about.sms.value"
-        :type="about.sms.type"
-        :required="about.sms.required"
-        :touched="about.sms.touched"
-        @input="handleValidate(about.sms)"
-      />-->
-      <h2>Адрес</h2>
-
-      <FormInput
-        :label="address.index.label"
-        v-model="address.index.value"
-        @input="handleValidate(address.index)"
-      />
-      <FormInput
-        :label="address.country.label"
-        v-model="address.country.value"
-        @input="handleValidate(address.country)"
-      />
-      <FormInput
-        :label="address.region.label"
-        v-model="address.region.value"
-        @input="handleValidate(address.region)"
-      />
-      <FormInput
-        :label="address.city.label"
-        v-model="address.city.value"
-        :required="address.city.required"
-        :touched="address.city.touched"
-        :errorText="address.city.errorText"
-        @input="handleValidate(address.city)"
-      />
-      <FormInput
-        :label="address.street.label"
-        v-model="address.street.value"
-        @input="handleValidate(address.street)"
-      />
-      <FormInput
-        :label="address.house.label"
-        v-model="address.house.value"
-        @input="handleValidate(address.house)"
-      />
-
-      <h2>Документ</h2>
-      <FromSelect
-        :label="document.typeDocument.label"
-        v-model="document.typeDocument.value"
-        :touched="document.typeDocument.touched"
-        :initialValue="document.typeDocument.initialValue"
-        :errorText="document.typeDocument.errorText"
-        @input="handleValidate(document.typeDocument)"
-      />
-      <FormInput
-        :label="document.series.label"
-        v-model="document.series.value"
-        @input="handleValidate(document.series)"
-      />
-      <FormInput
-        :label="document.item.label"
-        v-model="document.item.value"
-        @input="handleValidate(document.item)"
-      />
-      <FormInput
-        :label="document.issuedBy.label"
-        v-model="document.issuedBy.value"
-        @input="handleValidate(document.issuedBy)"
-      />
-      <FormInput
-        :label="document.dateOfIssue.label"
-        v-model="document.dateOfIssue.value"
-        :type="document.dateOfIssue.type"
-        @input="handleValidate(document.dateOfIssue)"
-      />
-      <button :disabled="validForm()">Отправить</button>
+      </div>
+      <hr class="form__separator" />
+      <h2 class="form__title">Документ</h2>
+      <div v-for="elem in Object.values(document)" :key="elem.label">
+        <template v-if="elem.type === 'select'">
+          <FromSelect
+            :type="elem.type"
+            :label="elem.label"
+            v-model="elem.value"
+            :touched="elem.touched"
+            :required="elem.required"
+            :initialValue="elem.initialValue"
+            :errorText="elem.errorText"
+            @input="handleValidate(elem)"
+          />
+        </template>
+        <template v-else-if="elem.type === 'date'">
+          <FormInput
+            :label="elem.label"
+            :type="elem.type"
+            v-model="elem.value"
+            :required="elem.required"
+            :touched="elem.touched"
+            :errorText="elem.errorText"
+            @input="handleValidate(elem)"
+          />
+        </template>
+        <template v-else>
+          <FormInput
+            :label="elem.label"
+            v-model="elem.value"
+            :placeholder="elem.placeholder"
+            @input="handleValidate(elem)"
+          />
+        </template>
+      </div>
+      <button class="form__button" :disabled="validForm()">Отправить</button>
     </form>
   </div>
 </template>
@@ -174,7 +110,7 @@ export default {
       about: {
         lastName: {
           type: "text",
-          label: "Фамилия*",
+          label: "Фамилия:*",
           value: "",
           touched: false,
           required: true,
@@ -184,7 +120,7 @@ export default {
         },
         firstName: {
           type: "text",
-          label: "Имя*",
+          label: "Имя:*",
           value: "",
           touched: false,
           required: true,
@@ -194,7 +130,7 @@ export default {
         },
         middleName: {
           type: "text",
-          label: "Отчество",
+          label: "Отчество:",
           value: "",
           touched: false,
           required: false,
@@ -202,28 +138,27 @@ export default {
           isValid: true,
         },
         dateOfBirth: {
-          label: "Дата рождения*",
+          label: "Дата рождения:*",
           value: "",
           touched: false,
           required: false,
-          placeholder: "Введите дату рождения",
           type: "date",
           errorText: "",
           isValid: false,
         },
         phoneNumber: {
           type: "text",
-          label: "Номер телефона*",
+          label: "Номер телефона:*",
           value: "",
           touched: false,
           required: true,
-          placeholder: "Введите номер телефона",
+          placeholder: "В формате +79876543210",
           name: "phone",
           errorText: "",
           isValid: false,
         },
         sex: {
-          label: "Выберете пол",
+          label: "Выберете пол:",
           value: "",
           name: "radio",
           type: "radio",
@@ -232,10 +167,12 @@ export default {
             { value: "Ж", text: "Ж", id: 2 },
           ],
           isValid: true,
+          required: false,
+          touched: false,
         },
         customerGroup: {
           type: "select",
-          label: "Группа клиентов*",
+          label: "Группа клиентов:*",
           value: [],
           touched: false,
           required: true,
@@ -250,7 +187,7 @@ export default {
         },
         attendingDoctor: {
           type: "select",
-          label: "Лечащий врач",
+          label: "Лечащий врач:",
           value: "",
           touched: false,
           required: false,
@@ -264,48 +201,53 @@ export default {
           ],
         },
         sms: {
-          label: "Не отправлять СМС",
+          label: "Не отправлять СМС:",
           value: false,
           required: false,
           touched: false,
           type: "checkbox",
-          errorText: "",
           isValid: true,
         },
       },
       address: {
         index: {
-          label: "Индекс",
+          label: "Индекс:",
           value: "",
           isValid: true,
+          placeholder: "Введите индекс",
         },
         country: {
-          label: "Страна",
+          label: "Страна:",
           value: "",
           isValid: true,
+          placeholder: "Введите страну",
         },
         region: {
-          label: "Область",
+          label: "Область:",
           value: "",
           isValid: true,
+          placeholder: "Введите регион",
         },
         city: {
           required: true,
           value: "",
-          label: "Город*",
+          label: "Город:*",
           touched: false,
           errorText: "",
           isValid: false,
+          placeholder: "Введите город",
         },
         street: {
-          label: "Улица",
+          label: "Улица:",
           value: "",
           isValid: true,
+          placeholder: "Введите улицу",
         },
         house: {
-          label: "Дом",
+          label: "Дом:",
           value: "",
           isValid: true,
+          placeholder: "Введите дом",
         },
       },
       document: {
@@ -324,28 +266,36 @@ export default {
           touched: false,
           errorText: "",
           isValid: false,
-          label: "Тип документа*",
+          label: "Тип документа:*",
+          type: "select",
         },
         series: {
-          label: "Серия",
+          label: "Серия:",
           value: "",
           isValid: true,
+          placeholder: "Введите серию документа",
         },
         item: {
-          label: "Номер",
+          label: "Номер:",
           value: "",
           isValid: true,
+          placeholder: "Введите номер документа",
         },
         issuedBy: {
-          label: "Кем выдан",
+          label: "Кем выдан:",
           value: "",
           isValid: true,
+          placeholder: "Введите кем выдан документ",
         },
         dateOfIssue: {
-          label: "Дата выдачи",
+          label: "Дата выдачи:*",
           value: "",
           type: "date",
-          isValid: true,
+          isValid: false,
+          placeholder: "Введите дату выдачи",
+          touched: false,
+          required: true,
+          errorText: "",
         },
       },
     };
@@ -356,12 +306,11 @@ export default {
       console.log(data);
     },
     handleValidate(data) {
-      console.log(data.value);
       let error = false;
       data.touched = true;
       data.isValid = true;
       data.errorText = "";
-      const regExp = /^((\+7)|(8))\s?((\([0-9]{3}\))|([0-9]{3}))\s?-?[0-9]{3}-?[0-9]{2}-?[0-9]{2}/;
+      const regExp = /^((\+7)|(8))[0-9]{10}$/;
       if (
         data.required === true &&
         data.touched === true &&
@@ -408,24 +357,30 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 400px;
+  max-width: 320px;
   margin: 0 auto;
   border: 1px solid gray;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 40px;
-}
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
-.form__label {
-  padding-bottom: 2px;
-  margin-top: 8px;
-}
-button {
-  margin-top: 10px;
+  &__button {
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  &__title {
+    margin: 0;
+  }
+
+  &__separator {
+    width: 100%;
+  }
 }
 </style>
