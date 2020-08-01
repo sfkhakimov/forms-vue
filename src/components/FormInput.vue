@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <label>
+  <div class="form-input">
+    <label class="">
       {{ label }}
       <input
-        v-if="(type === 'text' || type === 'date')"
+        v-if="type === 'text' || type === 'date'"
         :type="type"
         :placeholder="placeholder"
         :value="value"
         :required="required"
         @input="$emit('input', $event.target.value)"
         :name="name"
+        class="form-input__input"
       />
       <input
         v-if="type === 'checkbox'"
@@ -19,9 +20,10 @@
         :required="required"
         @change="$emit('input', $event.target.checked)"
         :name="name"
+        class="form-input__input"
       />
     </label>
-    <span>{{ errorText }}</span>
+    <span class="form-input__error">{{ errorText }}</span>
   </div>
 </template>
 <script>
@@ -49,19 +51,20 @@ export default {
 };
 </script>
 
-<style scoped>
-div {
+<style lang="scss" scoped>
+.form-input {
   padding-bottom: 2px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
-}
-label {
-  padding-bottom: 2px;
-  margin-top: 8px;
-}
-span {
-  color: red;
-  font-size: 12px;
-}
-</style>>
+
+  &__input {
+    margin-top: 4px;
+  }
+
+  &__error {
+    color: red;
+    font-size: 12px;
+  }
+}</style
+>>
