@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <label>
+  <div class="form-checked">
+    <label class="form-checked__label">
       {{ label }}
-      <p v-for="input in initialValue" :key="input.id">
+      <p
+        v-for="input in initialValue"
+        :key="input.id"
+        class="form-checked__text"
+      >
         {{ input.text }}
         <input
           :value="input.value"
@@ -12,7 +16,7 @@
         />
       </p>
     </label>
-    <span>{{ errorText }}</span>
+    <span class="form-checked__error">{{ errorText }}</span>
   </div>
 </template>
 <script>
@@ -23,7 +27,7 @@ export default {
     };
   },
   props: {
-    value: [String, Boolean],
+    value: String,
     label: String,
     required: Boolean,
     touched: Boolean,
@@ -37,27 +41,30 @@ export default {
       type: String,
       default: "text",
     },
-    placeholder: {
-      type: String,
-      default: "",
-    },
   },
 };
 </script>
 
-<style scoped>
-div {
+<style lang="scss" scoped>
+.form-checked {
   padding-bottom: 2px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
-}
-label {
-  padding-bottom: 2px;
-  margin-top: 8px;
-}
-span {
-  color: red;
-  font-size: 12px;
-}
-</style>>
+
+  &__label {
+    padding-bottom: 2px;
+    display: flex;
+  }
+
+  &__error {
+    color: red;
+    font-size: 12px;
+  }
+
+  &__text {
+    margin: 0;
+    margin-left: 6px;
+  }
+}</style
+>>
