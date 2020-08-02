@@ -95,6 +95,7 @@
         </template>
       </div>
       <button class="form__button" :disabled="validForm()">Отправить</button>
+      <span class="form__success" v-if="userRegistered">Клиент зарегистрирован</span>
     </form>
   </div>
 </template>
@@ -107,6 +108,7 @@ import FormChecked from "./FormChecked";
 export default {
   data() {
     return {
+      userRegistered: false,
       about: {
         lastName: {
           type: "text",
@@ -303,10 +305,36 @@ export default {
   methods: {
     submitForm() {
       const data = { ...this.about, ...this.address, ...this.document };
-      console.log(data);
+      this.userRegistered = true;
+      Object.values(this.about).forEach((elem) => {
+        if (elem.required === true) {
+          elem.isValid = false;
+        }
+        if (elem.multiple === true) {
+          elem.value = [];
+        }
+        if (elem.type === "checkbox") {
+          elem.value = false;
+        }
+        elem.value = "";
+      });
+      Object.values(this.address).forEach((elem) => {
+        if (elem.required === true) {
+          elem.isValid = false;
+        }
+        elem.value = "";
+      });
+      Object.values(this.document).forEach((elem) => {
+        if (elem.required === true) {
+          elem.isValid = false;
+        }
+        elem.value = "";
+      });
+      return console.log(data);
     },
     handleValidate(data) {
       let error = false;
+      this.userRegistered = false;
       data.touched = true;
       data.isValid = true;
       data.errorText = "";
@@ -381,6 +409,12 @@ export default {
 
   &__separator {
     width: 100%;
+  }
+
+  &__success {
+    color: #228b22;
+    padding-top: 10px;
+    font-size: 14px;
   }
 }
 </style>
